@@ -22,4 +22,17 @@ export const authService = {
     const res = await api.post("/auth/refresh-token", { refreshToken });
     return res.data;
   },
+
+    signup: async (
+    email: string,
+    password: string,
+    role: "ADMIN" | "MANAGER" | "EMPLOYEE"
+  ) => {
+    const res = await api.post("/auth/register", {
+      email,
+      password,
+      role,
+    });
+    return res.data;
+  },
 };

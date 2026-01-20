@@ -1,16 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth.store";
-import { Notify, Confirm  } from "notiflix";
+import { Notify, Confirm } from "notiflix";
 
 export default function LogoutButton() {
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
 
-  //   const handleLogout = () => {
-  //     logout();
-  //     Notify.success("Logged out successfully");
-  //     navigate("/login");
-  //   };
   const handleLogout = () => {
     Confirm.show(
       "Confirm Logout",

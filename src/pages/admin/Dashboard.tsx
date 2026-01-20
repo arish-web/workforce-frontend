@@ -1,33 +1,54 @@
-import LogoutButton from "../../components/LogoutButton";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="flex items-center justify-between bg-blue-600 text-white p-6 text-xl font-semibold">
+      <header className="bg-blue-600 text-white p-6 text-xl font-semibold flex justify-between">
         Admin Dashboard
-        <LogoutButton />
+        <button
+          onClick={() => {
+            sessionStorage.clear();
+            window.location.href = "/login";
+          }}
+          className="bg-white text-blue-600 px-4 py-1 rounded"
+        >
+          Logout
+        </button>
       </header>
 
       <main className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Stats */}
         <StatCard title="Total Employees" value="128" />
         <StatCard title="Managers" value="12" />
         <StatCard title="Active Projects" value="24" />
 
+        {/* Navigation */}
         <ActionCard
           title="User Management"
           desc="Create, update and remove users"
+          onClick={() => navigate("/admin/employees")}
         />
         <ActionCard
-          title="System Settings"
-          desc="Configure roles & permissions"
+          title="Location Management"
+          desc="Create and manage office locations"
+          onClick={() => navigate("/admin/locations/create")}
         />
-        <ActionCard title="Reports" desc="View organization-wide reports" />
+
+        <ActionCard
+          title="Reports"
+          desc="View organization-wide reports"
+          onClick={() => navigate("/admin/reports")}
+        />
       </main>
     </div>
   );
 }
 
-function StatCard({ title, value }: { title: string; value: string }) {
+/* ================== COMPONENTS ================== */
+
+function StatCard({ title, value }: { title: string; value: string | number }) {
   return (
     <div className="bg-white p-6 rounded-xl shadow">
       <p className="text-gray-500 text-sm">{title}</p>
@@ -36,9 +57,20 @@ function StatCard({ title, value }: { title: string; value: string }) {
   );
 }
 
-function ActionCard({ title, desc }: { title: string; desc: string }) {
+function ActionCard({
+  title,
+  desc,
+  onClick,
+}: {
+  title: string;
+  desc: string;
+  onClick?: () => void;
+}) {
   return (
-    <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
+    <div
+      onClick={onClick}
+      className="bg-white p-6 rounded-xl shadow hover:shadow-md transition cursor-pointer"
+    >
       <h3 className="font-semibold text-lg">{title}</h3>
       <p className="text-sm text-gray-500 mt-2">{desc}</p>
     </div>

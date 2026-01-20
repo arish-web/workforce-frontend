@@ -1,44 +1,39 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Notify } from "notiflix";
-import { FiEye, FiEyeOff, FiLogIn } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiUserPlus } from "react-icons/fi";
 import { useAuth } from "../hooks/useAuth";
 
-export default function Login() {
+export default function Signup() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { signup } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<"ADMIN" | "MANAGER" | "EMPLOYEE">("EMPLOYEE");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      Notify.failure("Email and password are required");
+    if (!email || !password || !role) {
+      Notify.failure("Email, password, and role are required");
+      return;
+    }
+
+    if (password.length < 8 || password.length > 12) {
+      Notify.failure("Password must be 8–12 characters long");
       return;
     }
 
     setLoading(true);
     try {
-      const data = await login(email, password);
-      Notify.success("Login successful");
-
-      switch (data.user.role) {
-        case "ADMIN":
-          navigate("/admin");
-          break;
-        case "MANAGER":
-          navigate("/manager");
-          break;
-        case "EMPLOYEE":
-          navigate("/employee");
-          break;
-      }
-    } catch {
-      Notify.failure("Invalid credentials");
+      await signup(email, password, role);
+      Notify.success("Signup successful. Please login.");
+      navigate("/login");
+    } catch (err: any) {
+      Notify.failure(err.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -50,12 +45,12 @@ export default function Login() {
         {/* Icon */}
         <div className="flex justify-center mb-4">
           <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
-            <FiLogIn size={24} />
+            <FiUserPlus size={24} />
           </div>
         </div>
 
         <h2 className="text-2xl font-bold text-center text-gray-900">
-          Welcome Back
+          Create Account
         </h2>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -94,12 +89,25 @@ export default function Login() {
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
+          </div>
 
-            <div className="text-right mt-1">
-              <span className="text-sm text-blue-600 cursor-pointer">
-                Forgot Password?
-              </span>
-            </div>
+          {/* Role */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Role
+            </label>
+            <select
+              value={role}
+              onChange={(e) =>
+                setRole(e.target.value as "ADMIN" | "MANAGER" | "EMPLOYEE")
+              }
+              className="w-full rounded-md border border-gray-300 px-3 py-2
+                         focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="EMPLOYEE">Employee</option>
+              <option value="MANAGER">Manager</option>
+              <option value="ADMIN">Admin</option>
+            </select>
           </div>
 
           {/* Submit */}
@@ -109,18 +117,18 @@ export default function Login() {
             className="w-full rounded-md bg-blue-600 py-2 text-white font-semibold
                        hover:bg-blue-700 transition disabled:opacity-60"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
 
-        {/* Signup */}
+        {/* Login link */}
         <p className="text-sm text-center text-gray-600 mt-6">
-          Don&apos;t have an account?{" "}
+          Already have an account?{" "}
           <span
             className="text-blue-600 font-medium cursor-pointer"
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/login")}
           >
-            Sign Up
+            Sign In
           </span>
         </p>
       </div>
