@@ -96,9 +96,9 @@ export default function Login() {
             </div>
 
             <div className="text-right mt-1">
-              <span className="text-sm text-blue-600 cursor-pointer">
+              {/* <span className="text-sm text-blue-600 cursor-pointer">
                 Forgot Password?
-              </span>
+              </span> */}
             </div>
           </div>
 
