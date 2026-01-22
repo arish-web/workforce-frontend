@@ -14,14 +14,14 @@ export default function TaskDetail() {
 }, []);
 
 
-useEffect(() => {
-  managerService.getTaskById(id!).then(setTask);
-}, [id]);
+// useEffect(() => {
+//   managerService.getTaskById(id!).then(setTask);
+// }, [id]);
 
-const addComment = async () => {
-  await managerService.addComment(id!, comment);
-  setComment("");
-};
+// const addComment = async () => {
+//   await managerService.addComment(id!, comment);
+//   setComment("");
+// };
 
   useEffect(() => {
     api.get(`/manager/tasks/${id}`).then(res => {
@@ -55,10 +55,10 @@ const addComment = async () => {
         value={comment}
         onChange={e => setComment(e.target.value)}
       />
-
+{/* 
       <button className="btn mt-2" onClick={addComment}>
         Add Comment
-      </button>
+      </button> */}
     </div>
   );
 }
