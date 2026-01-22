@@ -13,27 +13,11 @@ export default function TaskDetail() {
   managerService.getTasks().then(setTask);
 }, []);
 
-
-// useEffect(() => {
-//   managerService.getTaskById(id!).then(setTask);
-// }, [id]);
-
-// const addComment = async () => {
-//   await managerService.addComment(id!, comment);
-//   setComment("");
-// };
-
   useEffect(() => {
     api.get(`/manager/tasks/${id}`).then(res => {
       setTask(res.data);
     });
   }, [id]);
-
-//   const addComment = async () => {
-//     if (!comment) return;
-//     await api.post(`/tasks/${id}/comments`, { comment });
-//     setComment("");
-//   };
 
   if (!task) return <p className="p-6">Loading...</p>;
 
@@ -55,10 +39,6 @@ export default function TaskDetail() {
         value={comment}
         onChange={e => setComment(e.target.value)}
       />
-{/* 
-      <button className="btn mt-2" onClick={addComment}>
-        Add Comment
-      </button> */}
     </div>
   );
 }
