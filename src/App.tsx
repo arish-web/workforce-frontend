@@ -1,25 +1,34 @@
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // import { useEffect } from "react";
 
 // import Login from "./pages/Login";
+// import Signup from "./pages/Signup";
+
 // import AdminDashboard from "./pages/admin/Dashboard";
 // import ManagerDashboard from "./pages/manager/Dashboard";
 // import EmployeeDashboard from "./pages/employee/Dashboard";
+
+// import EmployeeList from "./pages/admin/employees/EmployeeList";
+// import CreateEmployee from "./pages/admin/employees/CreateEmployee";
+
+// import ManagerEmployeeList from "./pages/manager/employees/ManagerEmployeeList";
+// import ManagerCreateEmployee from "./pages/manager/employees/CreateEmployee";
+
 // import ProtectedRoute from "./components/ProtectedRoute";
-// import EmployeeList from "../src/pages/admin/employees/EmployeeList";
-// import CreateEmployee from "../src/pages/admin/employees/CreateEmployee";
 
 // import { useAuthStore } from "./store/auth.store";
 // import { authService } from "./services/auth.service";
-// import Signup from "./pages/Signup";
+// import AdminSettings from "./pages/admin/Settings";
+// import AdminReports from "./pages/admin/Reports";
+// import CreateLocation from "./pages/admin/locations/CreateLocation";
 
 // function App() {
 //   const loginStore = useAuthStore((s) => s.login);
 //   const logout = useAuthStore((s) => s.logout);
-//   const setAuthLoading = useAuthStore((s) => s.setAuthLoading);
+//   // const setAuthLoading = useAuthStore((s) => s.setAuthLoading);
 //   const accessToken = useAuthStore((s) => s.accessToken);
 
-//   // 🔹 RESTORE AUTH ON APP
+//   // 🔹 RESTORE AUTH ON APP LOAD
 //   useEffect(() => {
 //     const restoreAuth = async () => {
 //       try {
@@ -35,24 +44,26 @@
 //       } catch {
 //         logout();
 //       } finally {
-//         setAuthLoading(false);
+//         // setAuthLoading(false);
 //       }
 //     };
 
 //     if (accessToken) {
 //       restoreAuth();
 //     } else {
-//       setAuthLoading(false);
+//       // setAuthLoading(false);
 //     }
 //   }, [accessToken]);
 
 //   return (
 //     <BrowserRouter>
 //       <Routes>
+//         {/* PUBLIC */}
+//         <Route path="/" element={<Navigate to="/login" />} />
 //         <Route path="/login" element={<Login />} />
 //         <Route path="/signup" element={<Signup />} />
-//         <Route path="/" element={<Login />} />
 
+//         {/* ADMIN */}
 //         <Route
 //           path="/admin"
 //           element={
@@ -63,6 +74,52 @@
 //         />
 
 //         <Route
+//           path="/admin/employees"
+//           element={
+//             <ProtectedRoute allowedRoles={["ADMIN"]}>
+//               <EmployeeList />
+//             </ProtectedRoute>
+//           }
+//         />
+
+//         <Route
+//           path="/admin/settings"
+//           element={
+//             <ProtectedRoute allowedRoles={["ADMIN"]}>
+//               <AdminSettings />
+//             </ProtectedRoute>
+//           }
+//         />
+
+//         <Route
+//           path="/admin/reports"
+//           element={
+//             <ProtectedRoute allowedRoles={["ADMIN"]}>
+//               <AdminReports />
+//             </ProtectedRoute>
+//           }
+//         />
+
+//         <Route
+//           path="/admin/locations/create"
+//           element={
+//             <ProtectedRoute allowedRoles={["ADMIN"]}>
+//               <CreateLocation />
+//             </ProtectedRoute>
+//           }
+//         />
+
+//         <Route
+//           path="/admin/employees/create"
+//           element={
+//             <ProtectedRoute allowedRoles={["ADMIN"]}>
+//               <CreateEmployee />
+//             </ProtectedRoute>
+//           }
+//         />
+
+//         {/* MANAGER */}
+//         <Route
 //           path="/manager"
 //           element={
 //             <ProtectedRoute allowedRoles={["MANAGER"]}>
@@ -72,6 +129,25 @@
 //         />
 
 //         <Route
+//           path="/manager/employees"
+//           element={
+//             <ProtectedRoute allowedRoles={["MANAGER"]}>
+//               <ManagerEmployeeList />
+//             </ProtectedRoute>
+//           }
+//         />
+
+//         <Route
+//           path="/manager/employees/create"
+//           element={
+//             <ProtectedRoute allowedRoles={["MANAGER"]}>
+//               <ManagerCreateEmployee />
+//             </ProtectedRoute>
+//           }
+//         />
+
+//         {/* EMPLOYEE */}
+//         <Route
 //           path="/employee"
 //           element={
 //             <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
@@ -79,14 +155,16 @@
 //             </ProtectedRoute>
 //           }
 //         />
-//         <Route path="/admin/employees" element={<EmployeeList />} />
-//         <Route path="/admin/employees/create" element={<CreateEmployee />} />
+
+//         {/* FALLBACK */}
+//         <Route path="*" element={<Navigate to="/login" />} />
 //       </Routes>
 //     </BrowserRouter>
 //   );
 // }
 
 // export default App;
+
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -95,27 +173,27 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
 import AdminDashboard from "./pages/admin/Dashboard";
-import ManagerDashboard from "./pages/manager/Dashboard";
-import EmployeeDashboard from "./pages/employee/Dashboard";
-
-import EmployeeList from "./pages/admin/employees/EmployeeList";
-import CreateEmployee from "./pages/admin/employees/CreateEmployee";
-
-import ManagerEmployeeList from "./pages/manager/employees/ManagerEmployeeList";
-import ManagerCreateEmployee from "./pages/manager/employees/CreateEmployee";
-
-import ProtectedRoute from "./components/ProtectedRoute";
-
-import { useAuthStore } from "./store/auth.store";
-import { authService } from "./services/auth.service";
 import AdminSettings from "./pages/admin/Settings";
 import AdminReports from "./pages/admin/Reports";
 import CreateLocation from "./pages/admin/locations/CreateLocation";
+import EmployeeList from "./pages/admin/employees/EmployeeList";
+import CreateEmployee from "./pages/admin/employees/CreateEmployee";
+
+import ManagerDashboard from "./pages/manager/Dashboard";
+import ManagerEmployeeList from "./pages/manager/employees/ManagerEmployeeList";
+import ManagerTasks from "./pages/manager/tasks";
+import ManagerCreateTask from "./pages/manager/tasks/CreateTask";
+import ManagerTaskDetail from "./pages/manager/tasks/TaskDetail";
+
+import EmployeeDashboard from "./pages/employee/Dashboard";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuthStore } from "./store/auth.store";
+import { authService } from "./services/auth.service";
 
 function App() {
   const loginStore = useAuthStore((s) => s.login);
   const logout = useAuthStore((s) => s.logout);
-  const setAuthLoading = useAuthStore((s) => s.setAuthLoading);
   const accessToken = useAuthStore((s) => s.accessToken);
 
   // 🔹 RESTORE AUTH ON APP LOAD
@@ -133,17 +211,11 @@ function App() {
         });
       } catch {
         logout();
-      } finally {
-        setAuthLoading(false);
       }
     };
 
-    if (accessToken) {
-      restoreAuth();
-    } else {
-      setAuthLoading(false);
-    }
-  }, [accessToken]);
+    if (accessToken) restoreAuth();
+  }, [accessToken, loginStore, logout]);
 
   return (
     <BrowserRouter>
@@ -153,7 +225,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* ADMIN */}
+        {/* ================= ADMIN ================= */}
         <Route
           path="/admin"
           element={
@@ -168,6 +240,24 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["ADMIN"]}>
               <EmployeeList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/employees/create"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <CreateEmployee />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/locations/create"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <CreateLocation />
             </ProtectedRoute>
           }
         />
@@ -190,25 +280,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/admin/locations/create"
-          element={
-            <ProtectedRoute allowedRoles={["ADMIN"]}>
-              <CreateLocation />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/admin/employees/create"
-          element={
-            <ProtectedRoute allowedRoles={["ADMIN"]}>
-              <CreateEmployee />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* MANAGER */}
+        {/* ================= MANAGER ================= */}
         <Route
           path="/manager"
           element={
@@ -228,15 +300,33 @@ function App() {
         />
 
         <Route
-          path="/manager/employees/create"
+          path="/manager/tasks"
           element={
             <ProtectedRoute allowedRoles={["MANAGER"]}>
-              <ManagerCreateEmployee />
+              <ManagerTasks />
             </ProtectedRoute>
           }
         />
 
-        {/* EMPLOYEE */}
+        <Route
+          path="/manager/tasks/create"
+          element={
+            <ProtectedRoute allowedRoles={["MANAGER"]}>
+              <ManagerCreateTask />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/manager/tasks/:id"
+          element={
+            <ProtectedRoute allowedRoles={["MANAGER"]}>
+              <ManagerTaskDetail />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= EMPLOYEE ================= */}
         <Route
           path="/employee"
           element={
@@ -254,3 +344,4 @@ function App() {
 }
 
 export default App;
+

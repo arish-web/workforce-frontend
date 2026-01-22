@@ -2,18 +2,27 @@ import { useState } from "react";
 import { locationService } from "../../../services/location.service";
 import { Notify } from "notiflix";
 
-
 export default function CreateLocation() {
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submit = async () => {
-    if (!name) return;
-    await locationService.create(name);
-    setName("");
+    if (!name.trim()) {
+      Notify.failure("Location name required");
+      return;
+    }
+
     try {
-    Notify.success("Login successful") 
-    } catch {
-      Notify.failure("Invalid credentials");
+      setLoading(true);
+      await locationService.create(name); // 👈 unchanged
+      setName("");
+      Notify.success("Location created successfully");
+    } catch (err: any) {
+      Notify.failure(
+        err?.response?.data?.message || "Failed to create location"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,9 +39,10 @@ export default function CreateLocation() {
 
       <button
         onClick={submit}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        disabled={loading}
+        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
       >
-        Create
+        {loading ? "Creating..." : "Create"}
       </button>
     </div>
   );

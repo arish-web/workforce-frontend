@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Notify } from "notiflix";
-import { FiEye, FiEyeOff, FiLogIn } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
@@ -49,8 +49,12 @@ export default function Login() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         {/* Icon */}
         <div className="flex justify-center mb-4">
-          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
-            <FiLogIn size={24} />
+          <div className="w-20 h-20 flex items-center justify-center rounded-full bg-blue-100">
+            <img
+              src="/s-i logo.jfif"
+              alt="Logo"
+              className="w-30 h-21 object-contain rounded-full"
+            />
           </div>
         </div>
 

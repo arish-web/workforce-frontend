@@ -11,6 +11,7 @@ export const useAuth = () => {
     loginStore({
       user: data.user,
       accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
     });
 
     // ✅ DO NOT throw

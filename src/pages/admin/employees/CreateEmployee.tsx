@@ -39,10 +39,6 @@ export default function CreateEmployee() {
     locationId: "",
   });
 
-  // const submit = async () => {
-  //   await createEmployee(form);
-  //   navigate("/admin/employees");
-  // };
   const submit = async () => {
     try {
       await createEmployee(form);
@@ -79,7 +75,7 @@ export default function CreateEmployee() {
         {/* Temporary Password */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Temporary Password
+            Password
           </label>
           <input
             type="password"

@@ -1,31 +1,60 @@
 import { useNavigate } from "react-router-dom";
-import LogoutButton from "../../components/LogoutButton";
 
-export default function ManagerDashboard() {
+export default function Dashboard() {
   const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="flex items-center justify-between bg-yellow-500 text-white p-6 text-xl font-semibold">
+      {/* Header */}
+      <header className="bg-green-600 text-white p-6 text-xl font-semibold flex justify-between">
         Manager Dashboard
-        <LogoutButton />
+        <button
+          onClick={() => {
+            sessionStorage.clear();
+            window.location.href = "/login";
+          }}
+          className="bg-white text-blue-600 px-4 py-1 rounded"
+        >
+          Logout
+        </button>
       </header>
 
-      <main className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* <StatCard title="My Team Members" value="8" />
-        <StatCard title="Pending Tasks" value="14" /> */}
+      {/* Content */}
+      <main className="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Stats */}
+        <StatCard title="Total Tasks" value={12} />
+        <StatCard title="Pending" value={5} />
+        <StatCard title="Completed" value={6} />
+        <StatCard title="Overdue" value={1} />
 
+        {/* Navigation */}
         <ActionCard
-          title="My Team Members"
-          desc="View employees in your location"
-          onClick={() => navigate("/manager/employees")}
-        />
-
-        <ActionCard
-          title="Assign Tasks"
-          desc="Distribute tasks to your team"
+          title="Team Tasks"
+          desc="View and track team tasks"
           onClick={() => navigate("/manager/tasks")}
         />
+        <ActionCard
+          title="Assign Task"
+          desc="Create and assign new tasks"
+          onClick={() => navigate("/manager/tasks/create")}
+        />
+        <ActionCard
+          title="Reports"
+          desc="View team performance reports"
+          // onClick={() => navigate("/manager/reports")}
+        />
       </main>
+    </div>
+  );
+}
+
+/* ================== COMPONENTS ================== */
+
+function StatCard({ title, value }: { title: string; value: number }) {
+  return (
+    <div className="bg-white p-6 rounded-xl shadow">
+      <p className="text-gray-500 text-sm">{title}</p>
+      <h2 className="text-3xl font-bold mt-2">{value}</h2>
     </div>
   );
 }
@@ -42,13 +71,10 @@ function ActionCard({
   return (
     <div
       onClick={onClick}
-      className={`bg-white p-6 rounded-xl shadow transition
-        ${onClick ? "cursor-pointer hover:shadow-md" : ""}
-      `}
+      className="bg-white p-6 rounded-xl shadow hover:shadow-md transition cursor-pointer"
     >
       <h3 className="font-semibold text-lg">{title}</h3>
       <p className="text-sm text-gray-500 mt-2">{desc}</p>
     </div>
   );
 }
-

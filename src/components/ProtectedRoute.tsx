@@ -8,18 +8,16 @@ export default function ProtectedRoute({
   allowedRoles: ("ADMIN" | "MANAGER" | "EMPLOYEE")[];
   children: React.ReactNode;
 }) {
-  const { user, accessToken, isAuthLoading } = useAuthStore();
+  const { user, accessToken, refreshToken } = useAuthStore();
 
-  // ⏳ Wait until auth restore completes
-  if (isAuthLoading) {
-    return null; // or a loader
+  console.log("12345678",    refreshToken)
+
+  // ⏳ wait for token restore
+  if (!accessToken && !refreshToken) {
+    return null; // or loading spinner
   }
 
-  if (!accessToken || !user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (!allowedRoles.includes(user.role)) {
+  if (user && !allowedRoles.includes(user.role)) {
     return <Navigate to="/login" replace />;
   }
 

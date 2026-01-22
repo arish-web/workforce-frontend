@@ -1,4 +1,5 @@
 import { api } from "./api";
+import { authApi } from "./authApi";
 
 interface LoginPayload {
   email: string;
@@ -17,11 +18,12 @@ export const authService = {
     return res.data;
   },
 
-  // optional / future use
-  refreshToken: async (refreshToken: string) => {
-    const res = await api.post("/auth/refresh-token", { refreshToken });
-    return res.data;
-  },
+ refreshToken: async (refreshToken: string) => {
+  const res = await authApi.post("/auth/refresh-token", {
+    refreshToken,
+  });
+  return res.data;
+},
 
     signup: async (
     email: string,

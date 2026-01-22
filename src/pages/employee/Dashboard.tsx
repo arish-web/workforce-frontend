@@ -1,38 +1,70 @@
-import LogoutButton from "../../components/LogoutButton";
+import { useState } from "react";
 
-export default function EmployeeDashboard() {
+export default function Dashboard() {
+  const [tasks, setTasks] = useState([
+    { id: 1, title: "Submit timesheet", status: "Pending" },
+    { id: 2, title: "Fix UI bug", status: "In Progress" },
+  ]);
+
+  const updateStatus = (id: number, status: string) => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, status } : t))
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="flex items-center justify-between bg-green-600 text-white p-6 text-xl font-semibold">
+      {/* Header */}
+      <header className="bg-yellow-600 text-white p-6 text-xl font-semibold flex justify-between">
         Employee Dashboard
-        <LogoutButton />
+        <button
+          onClick={() => {
+            sessionStorage.clear();
+            window.location.href = "/login";
+          }}
+          className="bg-white text-blue-600 px-4 py-1 rounded"
+        >
+          Logout
+        </button>
       </header>
 
-      <main className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <StatCard title="My Tasks" value="5" />
-        <StatCard title="Completed This Week" value="3" />
+      {/* Content */}
+      <main className="p-6">
+        <h2 className="text-xl font-semibold mb-4">My Tasks</h2>
 
-        <ActionCard title="View Tasks" desc="Check assigned work & deadlines" />
-        <ActionCard title="Update Status" desc="Mark tasks as completed" />
+        <div className="bg-white rounded-xl shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="text-left p-4">Task</th>
+                <th className="p-4">Status</th>
+                <th className="p-4">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tasks.map((task) => (
+                <tr key={task.id} className="border-t">
+                  <td className="p-4">{task.title}</td>
+                  <td className="p-4 text-center">{task.status}</td>
+                  <td className="p-4 text-center">
+                    <select
+                      value={task.status}
+                      onChange={(e) =>
+                        updateStatus(task.id, e.target.value)
+                      }
+                      className="border rounded px-2 py-1"
+                    >
+                      <option>Pending</option>
+                      <option>In Progress</option>
+                      <option>Completed</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
-    </div>
-  );
-}
-
-function StatCard({ title, value }: { title: string; value: string }) {
-  return (
-    <div className="bg-white p-6 rounded-xl shadow">
-      <p className="text-gray-500 text-sm">{title}</p>
-      <h2 className="text-3xl font-bold mt-2">{value}</h2>
-    </div>
-  );
-}
-
-function ActionCard({ title, desc }: { title: string; desc: string }) {
-  return (
-    <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
-      <h3 className="font-semibold text-lg">{title}</h3>
-      <p className="text-sm text-gray-500 mt-2">{desc}</p>
     </div>
   );
 }

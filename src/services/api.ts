@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useAuthStore } from "../store/auth.store";
+import { authService } from "../services/auth.service";
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "http://localhost:5000/api/v1",
 });
 
 api.interceptors.request.use((config) => {
@@ -13,12 +14,73 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// api.interceptors.response.use(
+//   (res) => res,
+//   async (error) => {
+//     if (error.response?.status === 401) {
+//       const store = useAuthStore.getState();
+//       const refreshToken = store.refreshToken;
+
+//       if (!refreshToken) {
+//         store.logout();
+//         window.location.href = "/login";
+//         return Promise.reject(error);
+//       }
+
+//       try {
+//         // const res = await api.post("/auth/refresh-token", {
+//         //   refreshToken,
+//         // });
+//         console.log("123456788",  refreshToken )
+//         const res = await authService.refreshToken(refreshToken);
+
+//         store.setAccessToken(res.data.accessToken);
+
+//         error.config.headers.Authorization =
+//           `Bearer ${res.data.accessToken}`;
+
+//         return api(error.config);
+//       } catch {
+//         store.logout();
+//         window.location.href = "/login";
+//         return Promise.reject(error);
+//       }
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
+
 api.interceptors.response.use(
-  (res) => res,
-  async (error) => {
-    if (error.response?.status === 401) {
-      // refresh logic placeholder
+  res => res,
+  async error => {
+    if (error.response?.status !== 401) {
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
+
+    const store = useAuthStore.getState();
+    const refreshToken = store.refreshToken;
+
+    if (!refreshToken) {
+      store.logout();
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
+
+    try {
+      const data = await authService.refreshToken(refreshToken);
+
+      store.setAccessToken(data.accessToken);
+
+      error.config.headers.Authorization =
+        `Bearer ${data.accessToken}`;
+
+      return api(error.config);
+    } catch {
+      store.logout();
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
   }
 );
+

@@ -1,44 +1,94 @@
+// import { create } from "zustand";
+
+// interface AuthState {
+//   user: any | null;
+//   accessToken: string | null;
+//   refreshToken: string | null;
+
+//   login: (data: {
+//     user: any;
+//     accessToken: string;
+//     refreshToken?: string;
+//   }) => void;
+
+//   setAccessToken: (token: string) => void;
+//   logout: () => void;
+// }
+
+// export const useAuthStore = create<AuthState>((set) => ({
+//   user: null,
+//   accessToken: null,
+//   refreshToken: null,
+
+//   login: ({ user, accessToken, refreshToken }) =>
+//     set({
+//       user,
+//       accessToken,
+//       refreshToken: refreshToken || null,
+//     }),
+
+//   setAccessToken: (token) =>
+//     set({
+//       accessToken: token,
+//     }),
+
+    
+
+//   logout: () =>
+//     set({
+//       user: null,
+//       accessToken: null,
+//       refreshToken: null,
+//     }),
+// }));
+
+
 import { create } from "zustand";
 
-export interface User {
-  id: string;
-  email: string;
-  role: "ADMIN" | "MANAGER" | "EMPLOYEE";
-}
-
 interface AuthState {
-  user: User | null;
+  user: any | null;
   accessToken: string | null;
-  isAuthLoading: boolean;
-  login: (data: { user: User; accessToken: string }) => void;
-  setAuthLoading: (value: boolean) => void;
+  refreshToken: string | null;
+
+  login: (data: {
+    user: any;
+    accessToken: string;
+    refreshToken?: string;
+  }) => void;
+
+  setAccessToken: (token: string) => void;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   accessToken: sessionStorage.getItem("accessToken"),
-  isAuthLoading: true,
+  refreshToken: sessionStorage.getItem("refreshToken"),
 
-  login: (data) =>
-    set(() => {
-      sessionStorage.setItem("accessToken", data.accessToken);
-      return {
-        user: data.user,
-        accessToken: data.accessToken,
-        isAuthLoading: false,
-      };
-    }),
+  login: ({ user, accessToken, refreshToken }) => {
+    sessionStorage.setItem("accessToken", accessToken);
+    if (refreshToken) {
+      sessionStorage.setItem("refreshToken", refreshToken);
+    }
 
-  setAuthLoading: (value) => set({ isAuthLoading: value }),
+    set({
+      user,
+      accessToken,
+      refreshToken: refreshToken || null,
+    });
+  },
 
-  logout: () =>
-    set(() => {
-      sessionStorage.removeItem("accessToken");
-      return {
-        user: null,
-        accessToken: null,
-        isAuthLoading: false,
-      };
-    }),
+  setAccessToken: (token) => {
+    sessionStorage.setItem("accessToken", token);
+    set({ accessToken: token });
+  },
+
+  logout: () => {
+    sessionStorage.clear();
+    set({
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+    });
+  },
 }));
