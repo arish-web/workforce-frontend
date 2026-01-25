@@ -1,7 +1,41 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getEmployees } from "../../services/adminEmployee.service";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    totalEmployees: 0,
+    managers: 0,
+  });
+
+  useEffect(() => {
+    loadStats();
+  }, []);
+
+  const loadStats = async () => {
+    try {
+      const res = await getEmployees({
+        role: "",
+        location: "",
+        status: "",
+        page: 1,
+        limit: 1000, // enough for now
+      });
+
+      const manager = res.data;
+      const totalEmployee = res.data;
+
+
+      setStats({
+        // totalEmployees: res.total,
+        managers: manager.filter((e: any) => e.role === "MANAGER").length,
+        totalEmployees: totalEmployee.filter((e: any) => e.role === "EMPLOYEE").length,
+      });
+    } catch (err) {
+      console.error("Dashboard stats failed", err);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -20,9 +54,9 @@ export default function AdminDashboard() {
 
       <main className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Stats */}
-        <StatCard title="Total Employees" value="128" />
-        <StatCard title="Managers" value="12" />
-        <StatCard title="Active Projects" value="24" />
+        <StatCard title="Total Employees" value={stats.totalEmployees} />
+        <StatCard title="Managers" value={stats.managers} />
+        <StatCard title="Active Projects" value="10" />
 
         {/* Navigation */}
         <ActionCard

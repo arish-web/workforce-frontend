@@ -1,11 +1,31 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { managerService } from "../../services/manager.service";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [stats, setStats] = useState<any>(null);
+  // const [loading, setLoading] = useState(true);
+  useEffect(() => {
+  managerService
+    .getDashboardSummary()
+    .then((res) => {
+      console.log("DASHBOARD SUMMARY:", res.data);
+      setStats(res.data);
+    })
+    .catch((err) => {
+      console.error("Dashboard summary error", err);
+      setStats(null);
+    });
+}, []);
+
+
+  // if (loading) {
+  //   return <p className="p-6">Loading dashboard...</p>;
+  // }
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
       <header className="bg-green-600 text-white p-6 text-xl font-semibold flex justify-between">
         Manager Dashboard
         <button
@@ -19,15 +39,13 @@ export default function Dashboard() {
         </button>
       </header>
 
-      {/* Content */}
       <main className="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Stats */}
-        <StatCard title="Total Tasks" value={12} />
-        <StatCard title="Pending" value={5} />
-        <StatCard title="Completed" value={6} />
-        <StatCard title="Overdue" value={1} />
+        <StatCard title="Total Tasks" value={stats?.totalTasks ?? 0} />
+        <StatCard title="Pending" value={stats?.pending ?? 0} />
+        <StatCard title="In Progress" value={stats?.inProgress ?? 0} />
+        <StatCard title="Completed" value={stats?.completed ?? 0} />
+        <StatCard title="Overdue" value={stats?.overdue ?? 0} />
 
-        {/* Navigation */}
         <ActionCard
           title="Team Tasks"
           desc="View and track team tasks"
@@ -41,14 +59,12 @@ export default function Dashboard() {
         <ActionCard
           title="Reports"
           desc="View team performance reports"
-          // onClick={() => navigate("/manager/reports")}
+          onClick={() => navigate("/manager/reports")}
         />
       </main>
     </div>
   );
 }
-
-/* ================== COMPONENTS ================== */
 
 function StatCard({ title, value }: { title: string; value: number }) {
   return (
@@ -78,3 +94,5 @@ function ActionCard({
     </div>
   );
 }
+
+

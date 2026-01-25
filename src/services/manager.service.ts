@@ -1,31 +1,39 @@
+// // src/services/manager.service.ts
+// import { api } from "./api";
+
+// export const managerService = {
+//   getDashboardSummary: () =>
+//     api.get("/manager/dashboard/summary"),
+
+//   getTasks: (status?: string) =>
+//     api.get("/manager/tasks", {
+//       params: status ? { status } : {},
+//     }),
+// };
+
+
+// src/services/manager.service.ts
 import { api } from "./api";
 
-export const getManagerTasks = async () => {
-  const res = await api.get("/manager/tasks");
-  return res.data;
-};
-
-// export const managerService = async (payload: {
-//   title: string;
-//   deadline: string;
-//   employeeName?: string;
-// }) => {
-//   const res = await api.post("/manager/tasks", payload);
-//   return res.data;
-// };
 export const managerService = {
-  createTask: async (payload: {
-    title: string;
-    deadline: string;
-    employeeId?: string;
-    employeeName?: string;
-  }) => {
-    const res = await api.post("/manager/tasks/create", payload);
-    return res.data;
-  },
+  // Dashboard stats
+  getDashboardSummary: () =>
+    api.get("/manager/dashboard/summary"),
 
-  getTasks: async () => {
-    const res = await api.get("/manager/tasks");
-    return res.data;
-  },
+  // Team tasks list (with optional status filter)
+  getTasks: (status?: string) =>
+    api.get("/manager/tasks", {
+      params: status ? { status } : {},
+    }),
+
+  // Assign new task
+  createTask: (data: {
+    title: string;
+    description: string;
+    assignedTo: string;
+    dueDate: string;
+    priority: string;
+  }) =>
+    api.post("/manager/tasks", data),
 };
+
