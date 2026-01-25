@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { useAuthStore } from "../store/auth.store";
-// import { authService } from "../services/auth.service";
+import { authService } from "../services/auth.service";
 
 export const api = axios.create({
   baseURL: "http://localhost:5000/api/v1",
@@ -38,12 +38,9 @@ api.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      const res = await axios.post(
-        "http://localhost:5000/api/v1/auth/refresh-token",
-        { refreshToken }
-      );
-
-      const newAccessToken = res.data.accessToken;
+      const data = await authService.refreshToken(refreshToken);
+      const newAccessToken = data.accessToken;
+      
       sessionStorage.setItem("accessToken", newAccessToken);
 
       originalRequest.headers.Authorization =
