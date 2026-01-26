@@ -52,12 +52,12 @@ export default function CreateTask() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // const selectedDate = new Date(dueDate);
+  const selectedDate = new Date(dueDate);
 
-  // if (selectedDate < today) {
-  //   Notify.failure("Due date cannot be in the past");
-  //   return;
-  // }
+  if (selectedDate < today) {
+    Notify.failure("Due date cannot be in the past");
+    return;
+  }
 
     try {
       // Notiflix.Loading.standard("Creating task...");
