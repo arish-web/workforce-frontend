@@ -17,7 +17,8 @@ export default function CreateTask() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/manager/employees")
+    api
+      .get("/manager/employees")
       .then((res) => setEmployees(res.data))
       .catch(() => {
         Notify.failure("Failed to load employees");
@@ -26,47 +27,47 @@ export default function CreateTask() {
   }, []);
 
   const submit = async () => {
-      // 🔴 Title validation
-  if (!title.trim()) {
-    Notify.failure("Task title is required");
-    return;
-  }
+    // 🔴 Title validation
+    if (!title.trim()) {
+      Notify.failure("Task title is required");
+      return;
+    }
 
-  if (title.trim().length < 3) {
-    Notify.failure("Task title must be at least 3 characters");
-    return;
-  }
+    if (title.trim().length < 3) {
+      Notify.failure("Task title must be at least 3 characters");
+      return;
+    }
 
-  // 🔴 Employee validation
-  if (!employeeId) {
-    Notify.failure("Please select an employee");
-    return;
-  }
+    // 🔴 Employee validation
+    if (!employeeId) {
+      Notify.failure("Please select an employee");
+      return;
+    }
 
-  // 🔴 Due date validation
-  if (!dueDate) {
-    Notify.failure("Due date is required");
-    return;
-  }
+    // 🔴 Due date validation
+    if (!dueDate) {
+      Notify.failure("Due date is required");
+      return;
+    }
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-  const selectedDate = new Date(dueDate);
+    const selectedDate = new Date(dueDate);
 
-  if (selectedDate < today) {
-    Notify.failure("Due date cannot be in the past");
-    return;
-  }
+    if (selectedDate < today) {
+      Notify.failure("Due date cannot be in the past");
+      return;
+    }
 
     try {
       // Notiflix.Loading.standard("Creating task...");
-      
+
       await managerService.createTask({
         title,
         description: "",
         assignedTo: employeeId,
-        dueDate, 
+        dueDate,
         priority: "MEDIUM",
       });
 
@@ -93,7 +94,7 @@ export default function CreateTask() {
             Task Title
           </label>
           <input
-            className="input w-full"
+            className="input w-full p-2"
             placeholder="e.g. Build ecommerce website"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -106,7 +107,11 @@ export default function CreateTask() {
             Assign To
           </label>
           <select
-            className="input w-full"
+            className="
+    input w-full
+    text-xs sm:text-base
+    px-2 py-1 sm:px-3 sm:py-2
+  "
             value={employeeId}
             onChange={(e) => setEmployeeId(e.target.value)}
           >
@@ -126,7 +131,7 @@ export default function CreateTask() {
           </label>
           <input
             type="date"
-            className="input w-full"
+            className="input w-full p-2"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
           />

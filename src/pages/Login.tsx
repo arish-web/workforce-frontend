@@ -45,33 +45,42 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 px-4">
-      <div className="w-full max-w-md backdrop-blur-xl bg-white/90 rounded-3xl shadow-2xl p-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 px-3 sm:px-4">
+      <div
+        className="
+          w-full max-w-sm sm:max-w-md
+          backdrop-blur-xl bg-white/90
+          rounded-2xl sm:rounded-3xl
+          shadow-2xl
+          p-5 sm:p-8
+          relative overflow-hidden
+        "
+      >
         {/* Accent Glow */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="absolute -top-24 -right-24 w-48 sm:w-64 h-48 sm:h-64 bg-blue-500/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 w-48 sm:w-64 h-48 sm:h-64 bg-purple-500/20 rounded-full blur-3xl" />
 
         {/* Logo */}
-        <div className="flex justify-center mb-6 relative z-10">
-          <div className="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center">
+        <div className="flex justify-center mb-4 sm:mb-6 relative z-10">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white shadow-lg flex items-center justify-center">
             <img
               src="/s-i logo.jfif"
               alt="Logo"
-              className="w-14 h-14 object-contain rounded-full"
+              className="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded-full"
             />
           </div>
         </div>
 
         {/* Heading */}
-        <h2 className="text-3xl font-extrabold text-center text-gray-900 relative z-10">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-gray-900 relative z-10">
           Welcome Back
         </h2>
-        <p className="text-sm text-center text-gray-500 mt-1 relative z-10">
+        <p className="text-xs sm:text-sm text-center text-gray-500 mt-1 relative z-10">
           Sign in to continue to your dashboard
         </p>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5 relative z-10">
+        <form onSubmit={handleSubmit} className="mt-6 sm:mt-8 space-y-4 sm:space-y-5 relative z-10">
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -82,8 +91,12 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@company.com"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5
-                       focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full rounded-lg border border-gray-300
+                px-4 py-2.5
+                text-sm sm:text-base
+                focus:outline-none focus:ring-2 focus:ring-blue-500
+              "
             />
           </div>
 
@@ -98,15 +111,24 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 pr-11
-                         focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="
+                  w-full rounded-lg border border-gray-300
+                  px-4 py-2.5 pr-12
+                  text-sm sm:text-base
+                  focus:outline-none focus:ring-2 focus:ring-blue-500
+                "
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-4 flex items-center text-gray-500 hover:text-gray-700"
+                className="
+                  absolute inset-y-0 right-2
+                  flex items-center justify-center
+                  w-10 h-10
+                  text-gray-500 hover:text-gray-700
+                "
               >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
+                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
               </button>
             </div>
           </div>
@@ -115,18 +137,23 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600
-                     py-3 text-white font-semibold tracking-wide
-                     hover:from-blue-700 hover:to-indigo-700
-                     transition-all duration-200
-                     disabled:opacity-60"
+            className="
+              w-full rounded-xl
+              bg-gradient-to-r from-blue-600 to-indigo-600
+              py-3
+              text-sm sm:text-base
+              text-white font-semibold tracking-wide
+              hover:from-blue-700 hover:to-indigo-700
+              transition-all duration-200
+              disabled:opacity-60
+            "
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
         {/* Footer */}
-        <p className="text-sm text-center text-gray-600 mt-8 relative z-10">
+        <p className="text-xs sm:text-sm text-center text-gray-600 mt-6 sm:mt-8 relative z-10">
           Don&apos;t have an account?{" "}
           <span
             className="text-blue-600 font-semibold cursor-pointer hover:underline"

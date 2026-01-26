@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { createEmployee } from "../../../services/admin.service";
 import { useNavigate } from "react-router-dom";
 import {
-  getLocations,
   locationService,
 } from "../../../services/location.service";
 import { Notify } from "notiflix";
@@ -13,15 +12,6 @@ export default function CreateEmployee() {
   type Role = "ADMIN" | "MANAGER" | "EMPLOYEE";
 
   const [locations, setLocations] = useState<any[]>([]);
-
-  useEffect(() => {
-    const loadLocations = async () => {
-      const data = await getLocations();
-      setLocations(data);
-    };
-
-    loadLocations();
-  }, []);
 
   useEffect(() => {
     locationService.list().then(setLocations);
@@ -157,13 +147,6 @@ export default function CreateEmployee() {
 
         {/* Actions */}
         <div className="flex justify-end gap-3">
-          <button
-            onClick={() => navigate("/admin/employees")}
-            className="px-4 py-2 text-sm rounded-md border text-gray-600 hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-
           <button
             onClick={submit}
             className="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700"
