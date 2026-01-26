@@ -40,6 +40,33 @@ export default function CreateEmployee() {
   });
 
   const submit = async () => {
+    // 🔴 Email validation
+    if (!form.email) {
+      Notify.failure("Email is required");
+      return;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+      Notify.failure("Enter a valid email address");
+      return;
+    }
+
+    // 🔴 Password validation
+    if (!form.password) {
+      Notify.failure("Password is required");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      Notify.failure("Password must be at least 6 characters");
+      return;
+    }
+
+    // 🔴 Role validation
+    if (!form.role) {
+      Notify.failure("Role is required");
+      return;
+    }
     try {
       await createEmployee(form);
 

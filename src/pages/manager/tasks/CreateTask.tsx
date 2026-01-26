@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Notiflix from "notiflix";
+import { Notify } from "notiflix";
 import { api } from "../../../services/api";
 import { managerService } from "../../../services/manager.service";
 
@@ -20,16 +20,44 @@ export default function CreateTask() {
     api.get("/manager/employees")
       .then((res) => setEmployees(res.data))
       .catch(() => {
-        Notiflix.Notify.failure("Failed to load employees");
+        Notify.failure("Failed to load employees");
         setEmployees([]);
       });
   }, []);
 
   const submit = async () => {
-    if (!title || !employeeId || !dueDate) {
-      Notiflix.Notify.warning("Please fill all fields");
-      return;
-    }
+      // 🔴 Title validation
+  if (!title.trim()) {
+    Notify.failure("Task title is required");
+    return;
+  }
+
+  if (title.trim().length < 3) {
+    Notify.failure("Task title must be at least 3 characters");
+    return;
+  }
+
+  // 🔴 Employee validation
+  if (!employeeId) {
+    Notify.failure("Please select an employee");
+    return;
+  }
+
+  // 🔴 Due date validation
+  if (!dueDate) {
+    Notify.failure("Due date is required");
+    return;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // const selectedDate = new Date(dueDate);
+
+  // if (selectedDate < today) {
+  //   Notify.failure("Due date cannot be in the past");
+  //   return;
+  // }
 
     try {
       // Notiflix.Loading.standard("Creating task...");
@@ -43,12 +71,12 @@ export default function CreateTask() {
       });
 
       // Notiflix.Loading.remove();
-      Notiflix.Notify.success("Task created successfully");
+      Notify.success("Task created successfully");
 
       navigate("/manager/tasks");
     } catch (err) {
       // Notiflix.Loading.remove();
-      Notiflix.Notify.failure("Failed to create task");
+      Notify.failure("Failed to create task");
     }
   };
 

@@ -1,29 +1,15 @@
-// // src/services/manager.service.ts
-// import { api } from "./api";
-
-// export const managerService = {
-//   getDashboardSummary: () =>
-//     api.get("/manager/dashboard/summary"),
-
-//   getTasks: (status?: string) =>
-//     api.get("/manager/tasks", {
-//       params: status ? { status } : {},
-//     }),
-// };
-
-
-// src/services/manager.service.ts
 import { api } from "./api";
 
 export const managerService = {
   // Dashboard stats
-  getDashboardSummary: () =>
-    api.get("/manager/dashboard/summary"),
-
-  // Team tasks list (with optional status filter)
-  getTasks: (status?: string) =>
+  getDashboardSummary: () => api.get("/manager/dashboard/summary"),
+  getTasks: (params?: { status?: string; page?: number; limit?: number }) =>
     api.get("/manager/tasks", {
-      params: status ? { status } : {},
+      params: {
+        status: params?.status,
+        page: params?.page,
+        limit: params?.limit,
+      },
     }),
 
   // Assign new task
@@ -33,7 +19,5 @@ export const managerService = {
     assignedTo: string;
     dueDate: string;
     priority: string;
-  }) =>
-    api.post("/manager/tasks", data),
+  }) => api.post("/manager/tasks", data),
 };
-

@@ -11,6 +11,7 @@ export default function EmployeeList() {
   const [page, setPage] = useState(1);
   const limit = 10;
   const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   const [employees, setEmployees] = useState<any[]>([]);
@@ -25,10 +26,6 @@ export default function EmployeeList() {
   useEffect(() => {
     locationService.list().then(setLocations);
   }, []);
-
-  // useEffect(() => {
-  //   load();
-  // }, [filters]);
   useEffect(() => {
     load();
   }, [filters, page]);
@@ -37,19 +34,25 @@ export default function EmployeeList() {
     setPage(1);
   }, [filters]);
 
-  // const load = async () => {
-  //   const data = await getEmployees(filters);
-  //   setEmployees(data);
-  // };
   const load = async () => {
-    const res = await getEmployees({
-      ...filters,
-      page,
-      limit,
-    });
+    try {
+      setLoading(true);
 
-    setEmployees(res.data);
-    setTotal(res.total);
+      const res = await getEmployees({
+        ...filters,
+        page,
+        limit,
+      });
+
+      setEmployees(res.data);
+      setTotal(res.total);
+    } catch (err) {
+      console.error("Failed to fetch employees", err);
+      setEmployees([]);
+      setTotal(0);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -99,62 +102,75 @@ export default function EmployeeList() {
             <th className="p-2 text-center w-1/6">Action</th>
           </tr>
         </thead>
-
         <tbody>
-          {employees.map((e) => (
-            <tr key={e.id} className="border-t">
-              <td className="p-2 truncate">{e.email}</td>
-              <td className="p-2">{e.role}</td>
-              <td>
-                <select
-                  value={e.locationId || ""}
-                  onChange={async (ev) => {
-                    await updateEmployee(e.id, {
-                      locationId: ev.target.value,
-                    });
-                    load();
-                  }}
-                >
-                  <option value="">Unassigned</option>
-                  {locations.map((l) => (
-                    <option key={l.id} value={l.id}>
-                      {l.name}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td className="p-2">
-                <span
-                  className={`px-2 py-1 rounded text-xs ${
-                    e.isActive
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {e.isActive ? "Active" : "Inactive"}
-                </span>
-              </td>
-
-              <td className="text-center">
-                <button
-                  onClick={async () => {
-                    await toggleEmployeeStatus(e.id, !e.isActive);
-                    load();
-                  }}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition
-      ${e.isActive ? "bg-green-500" : "bg-gray-300"}
-    `}
-                  aria-label="Toggle employee status"
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition
-        ${e.isActive ? "translate-x-6" : "translate-x-1"}
-      `}
-                  />
-                </button>
+          {loading ? (
+            <tr>
+              <td colSpan={5} className="p-4 text-center">
+                Loading employees...
               </td>
             </tr>
-          ))}
+          ) : employees.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="p-4 text-center text-gray-500">
+                No employees found
+              </td>
+            </tr>
+          ) : (
+            employees.map((e) => (
+              <tr key={e.id} className="border-t">
+                <td className="p-2 truncate">{e.email}</td>
+                <td className="p-2">{e.role}</td>
+
+                <td className="p-2">
+                  <select
+                    value={e.locationId || ""}
+                    onChange={async (ev) => {
+                      await updateEmployee(e.id, {
+                        locationId: ev.target.value,
+                      });
+                      load();
+                    }}
+                  >
+                    <option value="">Unassigned</option>
+                    {locations.map((l) => (
+                      <option key={l.id} value={l.id}>
+                        {l.name}
+                      </option>
+                    ))} 
+                  </select>
+                </td>
+
+                <td className="p-2">
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      e.isActive
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {e.isActive ? "Active" : "Inactive"}
+                  </span>
+                </td>
+
+                <td className="text-center">
+                  <button
+                    onClick={async () => {
+                      await toggleEmployeeStatus(e.id, !e.isActive);
+                      load();
+                    }}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition
+              ${e.isActive ? "bg-green-500" : "bg-gray-300"}`}
+                    aria-label="Toggle employee status"
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition
+                ${e.isActive ? "translate-x-6" : "translate-x-1"}`}
+                    />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
       <div className="flex justify-between items-center mt-4">
