@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createEmployee } from "../../../services/adminEmployee.service";
+import { createEmployee } from "../../../services/admin.service";
 import { useNavigate } from "react-router-dom";
 import {
   getLocations,

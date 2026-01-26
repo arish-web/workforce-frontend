@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { managerService } from "../../services/manager.service";
+import LogoutButton from "../../components/LogoutButton";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [stats, setStats] = useState<any>(null);
   // const [loading, setLoading] = useState(true);
   useEffect(() => {
-  managerService
-    .getDashboardSummary()
-    .then((res) => {
-      console.log("DASHBOARD SUMMARY:", res.data);
-      setStats(res.data);
-    })
-    .catch((err) => {
-      console.error("Dashboard summary error", err);
-      setStats(null);
-    });
-}, []);
-
+    managerService
+      .getDashboardSummary()
+      .then((res) => {
+        console.log("DASHBOARD SUMMARY:", res.data);
+        setStats(res.data);
+      })
+      .catch((err) => {
+        console.error("Dashboard summary error", err);
+        setStats(null);
+      });
+  }, []);
 
   // if (loading) {
   //   return <p className="p-6">Loading dashboard...</p>;
@@ -26,17 +26,9 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-green-600 text-white p-6 text-xl font-semibold flex justify-between">
+      <header className="bg-green-600 text-white p-6 text-2xl font-bold flex justify-between">
         Manager Dashboard
-        <button
-          onClick={() => {
-            sessionStorage.clear();
-            window.location.href = "/login";
-          }}
-          className="bg-white text-blue-600 px-4 py-1 rounded"
-        >
-          Logout
-        </button>
+        <LogoutButton />
       </header>
 
       <main className="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -94,5 +86,3 @@ function ActionCard({
     </div>
   );
 }
-
-

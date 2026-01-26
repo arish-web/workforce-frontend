@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getEmployees } from "../../services/adminEmployee.service";
+import { getAdminSummary, getEmployees } from "../../services/admin.service";
+import LogoutButton from "../../components/LogoutButton";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -8,6 +9,16 @@ export default function AdminDashboard() {
     totalEmployees: 0,
     managers: 0,
   });
+
+  const [summary, setSummary] = useState({
+    totalEmployees: 0,
+    totalManagers: 0,
+    totalTasks: 0,
+  });
+
+  useEffect(() => {
+    getAdminSummary().then(setSummary);
+  }, []);
 
   useEffect(() => {
     loadStats();
@@ -26,11 +37,11 @@ export default function AdminDashboard() {
       const manager = res.data;
       const totalEmployee = res.data;
 
-
       setStats({
         // totalEmployees: res.total,
         managers: manager.filter((e: any) => e.role === "MANAGER").length,
-        totalEmployees: totalEmployee.filter((e: any) => e.role === "EMPLOYEE").length,
+        totalEmployees: totalEmployee.filter((e: any) => e.role === "EMPLOYEE")
+          .length,
       });
     } catch (err) {
       console.error("Dashboard stats failed", err);
@@ -39,24 +50,16 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-blue-600 text-white p-6 text-xl font-semibold flex justify-between">
+      <header className="bg-blue-600 text-white p-6 text-2xl font-bold flex justify-between">
         Admin Dashboard
-        <button
-          onClick={() => {
-            sessionStorage.clear();
-            window.location.href = "/login";
-          }}
-          className="bg-white text-blue-600 px-4 py-1 rounded"
-        >
-          Logout
-        </button>
+        <LogoutButton />
       </header>
 
       <main className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Stats */}
         <StatCard title="Total Employees" value={stats.totalEmployees} />
         <StatCard title="Managers" value={stats.managers} />
-        <StatCard title="Active Projects" value="10" />
+        <StatCard title="Active Projects" value={summary.totalTasks} />
 
         {/* Navigation */}
         <ActionCard

@@ -4,7 +4,7 @@ import {
   getEmployees,
   toggleEmployeeStatus,
   updateEmployee,
-} from "../../../services/adminEmployee.service";
+} from "../../../services/admin.service";
 import { locationService } from "../../../services/location.service";
 
 export default function EmployeeList() {

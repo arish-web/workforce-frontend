@@ -45,3 +45,12 @@ export const toggleEmployeeStatus = async (id: string, isActive: boolean) => {
   });
   return res.data;
 };
+
+export const getAdminSummary = async (): Promise<{
+  totalEmployees: number;
+  totalManagers: number;
+  totalTasks: number;
+}> => {
+  const res = await api.get("/admin/summary");
+  return res.data;
+};
