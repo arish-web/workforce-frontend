@@ -108,9 +108,9 @@ export default function CreateTask() {
           </label>
           <select
             className="
-    input w-full
+    input w-full p-3
     text-xs sm:text-base
-    px-2 py-1 sm:px-3 sm:py-2
+    sm:px-3 sm:py-2
   "
             value={employeeId}
             onChange={(e) => setEmployeeId(e.target.value)}
