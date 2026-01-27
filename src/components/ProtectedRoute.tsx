@@ -10,8 +10,6 @@ export default function ProtectedRoute({
 }) {
   const { user, accessToken, refreshToken } = useAuthStore();
 
-  console.log("12345678",    refreshToken)
-
   // ⏳ wait for token restore
   if (!accessToken && !refreshToken) {
     return null; // or loading spinner
