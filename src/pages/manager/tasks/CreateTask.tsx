@@ -107,11 +107,9 @@ export default function CreateTask() {
             Assign To
           </label>
           <select
-            className="
-    input w-full p-3
-    text-xs sm:text-base
-    sm:px-3 sm:py-2
-  "
+            className="input w-full p-3
+                       text-xs sm:text-base
+                       sm:px-3 sm:py-2"
             value={employeeId}
             onChange={(e) => setEmployeeId(e.target.value)}
           >
