@@ -10,6 +10,9 @@ export default function ProtectedRoute({
 }) {
   const { user, accessToken, refreshToken } = useAuthStore();
 
+  console.log("arish",    useAuthStore.getState());
+
+
   // ⏳ wait for token restore
   if (!accessToken && !refreshToken) {
     return null; // or loading spinner

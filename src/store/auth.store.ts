@@ -21,15 +21,22 @@ export const useAuthStore = create<AuthState>((set) => ({
   refreshToken: sessionStorage.getItem("refreshToken"),
 
   login: ({ user, accessToken, refreshToken }) => {
-    sessionStorage.setItem("accessToken", accessToken);
-    if (refreshToken) {
-      sessionStorage.setItem("refreshToken", refreshToken);
-    }
+    set((state) => {
+      if (state.user) {
+        return state;
+      }
 
-    set({
-      user,
-      accessToken,
-      refreshToken: refreshToken || null,
+      sessionStorage.setItem("accessToken", accessToken);
+
+      if (refreshToken) {
+        sessionStorage.setItem("refreshToken", refreshToken);
+      }
+
+      return {
+        user,
+        accessToken,
+        refreshToken: refreshToken ?? state.refreshToken,
+      };
     });
   },
 
